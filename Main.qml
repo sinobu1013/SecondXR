@@ -29,6 +29,7 @@ XrView {
         onTouchPositionChanged: {
             const scenePos = theOrigin.mapPositionToScene(touchPosition)
             teapotNode.handleTouch(scenePos)
+            // console.log("rightTrigger.pressed", rightTrigger.pressed, teapotNode.touched)
 
             if(teapotNode.picked){
                 teapotNode.position = scenePos.minus(teapotNode.relativeOffset);
@@ -49,7 +50,6 @@ XrView {
         }
     }
 
-    xrOrigin: theOrigin
     XrOrigin {
         id: theOrigin
         z: 0
@@ -63,7 +63,24 @@ XrView {
             hand: XrHandModel.LeftHand
             touchId: 1
         }
+
+        XrCamera {
+            property vector3d now_position: Qt.vector3d(0,170,0)
+            onPositionChanged: {
+                // console.log("position: ", position)
+                // console.log("boardNode position : ", boardNode.position)
+                boardNode.x += position.x - now_position.x
+                boardNode.y += position.y - now_position.y
+                boardNode.z += position.z - now_position.z
+                now_position = position
+            }
+            onEulerRotationChanged: {
+                console.log("kakudo: ", eulerRotation)
+                boardNode.eulerRotation = eulerRotation
+            }
+        }
     }
+    xrOrigin: theOrigin
 
     //! [trigger input]
     XrInputAction {
@@ -78,11 +95,16 @@ XrView {
             }
 
             if(teapotNode.picked) {
-                const scenePos = theOrigin.mapPositionToScene(rightHandModel.touchPosition)
-                teapotNode.relativeOffset = scenePos.minus(teapotNode.scenePosition)
-
+                // const scenePos = theOrigin.mapPositionToScene(rightHandModel.touchPosition)
+                // teapotNode.relativeOffset = scenePos.minus(teapotNode.scenePosition)
             }
         }
+    }
+
+    XrVirtualMouse {
+        view: xrView
+        source: rightHandModel
+        leftMouseButton: rightTrigger.pressed
     }
 
     DirectionalLight {
@@ -98,17 +120,20 @@ XrView {
         property bool touched: false
         property bool picked: false
         property vector3d relativeOffset: Qt.vector3d(0,0,-10)
+        property real count: 0
 
         function handleTouch(touchPos: vector3d) {
             const localPos = mapPositionFromScene(touchPos)
-            const touchRange = Math.max(teapot.scale.x, teapot.scale.y, teapot.scale.z) / 3
+            const touchRange = Math.max(teapot.scale.x, teapot.scale.y, teapot.scale.z)/3
             touched = Math.abs(localPos.x) < touchRange && Math.abs(localPos.y) < touchRange && Math.abs(localPos.z) < touchRange
+            count += 1
+            // console.log("count: ", count)
 
             if(touched && !picked) {
-                console.log("touch!!")
+                // console.log("touch!!")
                 teapot.color = Qt.color("red")
             }else{
-                console.log("Not touch")
+                // console.log("Not touch")
                 teapot.color = Qt.color("blue")
             }
 
@@ -129,6 +154,20 @@ XrView {
                     metalness: metalnessCheckBox.checked ? 1.0 : 0.0
                 }
             ]
+        }
+    }
+
+    Node {
+        id: boardNode
+        objectName: boardNode
+        x: 0
+        y: 170
+        z: -100
+        Rectangle {
+            id: board
+            width: 50
+            height: 50
+            color: "red"
         }
     }
 }
