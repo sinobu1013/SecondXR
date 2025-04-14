@@ -66,6 +66,7 @@ XrView {
 
         XrCamera {
             property vector3d now_position: Qt.vector3d(0,170,0)
+            property vector3d now_rota: eulerRotation
             onPositionChanged: {
                 // console.log("position: ", position)
                 // console.log("boardNode position : ", boardNode.position)
@@ -76,7 +77,27 @@ XrView {
             }
             onEulerRotationChanged: {
                 console.log("kakudo: ", eulerRotation)
+                console.log("now_kakudo: ", now_rota)
                 boardNode.eulerRotation = eulerRotation
+                y_turn(eulerRotation, now_rota)
+                console.log("y_turn", boardNode.position)
+                now_rota = eulerRotation
+            }
+
+            function y_turn(now: vector3d, old: vector3d) {
+                let ans = Qt.vector3d(0,0,0)
+                let temp = Qt.vector3d(0,0,0)
+                temp.x = now.x - old.x
+                temp.y = now.y - old.y
+                temp.z = now.z - old.z
+                let cos = Math.cos(temp.y)
+                let sin = Math.sin(temp.y)
+                ans.x = boardNode.x * cos + boardNode.z * sin
+                ans.y = boardNode.y
+                ans.z = boardNode.x * sin * -1 + boardNode.z * cos
+                boardNode.x = ans.x
+                boardNode.y = ans.y
+                boardNode.z = ans.z
             }
         }
     }
