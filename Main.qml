@@ -66,7 +66,8 @@ XrView {
 
         XrCamera {
             property vector3d now_position: Qt.vector3d(0,170,0)
-            property vector3d now_rota: eulerRotation
+            property vector3d now_rota: Qt.vector3d(0,0,0)
+            property vector3d boardPosition: Qt.vector3d(0,170,-100)
             onPositionChanged: {
                 // console.log("position: ", position)
                 // console.log("boardNode position : ", boardNode.position)
@@ -79,9 +80,13 @@ XrView {
                 console.log("kakudo: ", eulerRotation)
                 console.log("now_kakudo: ", now_rota)
                 boardNode.eulerRotation = eulerRotation
-                y_turn(eulerRotation, now_rota)
+                let x = rotation
+                // console.log("rotation", x.toEulerAngles())
+                // if(Math.abs(eulerRotation.y - now_rota.y) > 30){
+                    y_turn(eulerRotation, now_rota)
+                    now_rota = eulerRotation
+                // }
                 console.log("y_turn", boardNode.position)
-                now_rota = eulerRotation
             }
 
             function y_turn(now: vector3d, old: vector3d) {
@@ -90,15 +95,33 @@ XrView {
                 temp.x = now.x - old.x
                 temp.y = now.y - old.y
                 temp.z = now.z - old.z
-                let cos = Math.cos(temp.y)
-                let sin = Math.sin(temp.y)
+                // if(Math.abs(temp.y) < 1) return
+                console.log("temp.y : ", (temp.y * Math.PI) / 180)
+                let cos = Math.cos((temp.y * Math.PI) / 180)
+                let sin = Math.sin((temp.y * Math.PI) / 180)
                 ans.x = boardNode.x * cos + boardNode.z * sin
                 ans.y = boardNode.y
                 ans.z = boardNode.x * sin * -1 + boardNode.z * cos
+                // boardNode.x = 100 * Math.sin(now.y)
+                // boardNode.y = ans.y
+                // boardNode.z = 100 * Math.cos(now.y)
                 boardNode.x = ans.x
                 boardNode.y = ans.y
                 boardNode.z = ans.z
             }
+
+            // function y_turn(now: vector3d) {
+            //     let ans = Qt.vector3d(0,0,0)
+            //     if(Math.abs(now.y) < 1) return
+            //     let cos = Math.cos(now.y)
+            //     let sin = Math.sin(now.y)
+            //     ans.x = boardNode.x * cos + boardNode.z * sin
+            //     ans.y = boardNode.y
+            //     ans.z = boardNode.x * sin * -1 + boardNode.z * cos
+            //     boardNode.x = ans.x
+            //     boardNode.y = ans.y
+            //     boardNode.z = ans.z
+            // }
         }
     }
     xrOrigin: theOrigin
