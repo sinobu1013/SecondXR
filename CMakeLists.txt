@@ -1,22 +1,36 @@
-cmake_minimum_required(VERSION 3.16)
+# Copyright (C) 2024 The Qt Company Ltd.
+# SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
-project(SecondXR VERSION 0.1 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.16)
+project(SecondXR LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 COMPONENTS Core Gui Quick Quick3D Quick3DXr)
 
-qt_standard_project_setup(REQUIRES 6.8)
 qt6_policy(SET QTP0002 NEW)
 
-qt_add_executable(${CMAKE_PROJECT_NAME}
+qt_add_executable(SecondXR
     MANUAL_FINALIZATION
     main.cpp
     android/AndroidManifest.xml
 )
 
-qt_add_qml_module(${CMAKE_PROJECT_NAME}
-    URI ${CMAKE_PROJECT_NAME}
+set_target_properties(SecondXR PROPERTIES
+    WIN32_EXECUTABLE TRUE
+    MACOSX_BUNDLE TRUE
+)
+
+target_link_libraries(SecondXR PUBLIC
+    Qt::Core
+    Qt::Gui
+    Qt::Quick
+    Qt::Quick3D
+    Qt::Quick3DXr
+)
+
+qt_add_qml_module(SecondXR
+    URI Example
     VERSION 1.0
     QML_FILES
         Main.qml
@@ -25,35 +39,30 @@ qt_add_qml_module(${CMAKE_PROJECT_NAME}
     NO_RESOURCE_TARGET_PATH
 )
 
+if(ANDROID)
+    set_property(TARGET SecondXR APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android)
+endif()
+
 if (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "visionOS")
-    set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
-        MACOSX_BUNDLE_GUI_IDENTIFIER io.qt.${CMAKE_PROJECT_NAME}
+    set_target_properties(SecondXR PROPERTIES
+        MACOSX_BUNDLE_GUI_IDENTIFIER io.qt.xr_input
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/visionos/MacOSXBundleInfo.plist.in
     )
 endif()
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-        Qt::Core
-        Qt::Gui
-        Qt::Quick
-        Qt::Quick3D
-        Qt::Quick3DXr
-)
+qt_finalize_executable(SecondXR)
 
-if(ANDROID)
-    set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
-            QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android"
-            QT_ANDROID_PACKAGE_NAME "org.qtproject.example.${CMAKE_PROJECT_NAME}"
-            QT_ANDROID_APP_NAME "${CMAKE_PROJECT_NAME}"
-            QT_ANDROID_TARGET_SDK_VERSION 32
-            QT_ANDROID_MIN_SDK_VERSION 32
-            QT_ANDROID_VERSION_NAME "1.0")
-endif()
-
-qt_finalize_executable(${CMAKE_PROJECT_NAME})
-install(TARGETS ${CMAKE_PROJECT_NAME}
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+install(TARGETS SecondXR
+    BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
+qt_generate_deploy_qml_app_script(
+    TARGET SecondXR
+    OUTPUT_SCRIPT deploy_script
+    MACOS_BUNDLE_POST_BUILD
+    NO_UNSUPPORTED_PLATFORM_ERROR
+    DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+)
+install(SCRIPT ${deploy_script})
