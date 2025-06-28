@@ -8,6 +8,7 @@ XrView {
 
     property bool preferPassthrough: true
     passthroughEnabled: passthroughSupported && preferPassthrough
+    referenceSpace: XrView.ReferenceSpaceLocalFloor
 
     environment: SceneEnvironment {
         clearColor: "skyblue"
@@ -101,4 +102,5 @@ XrView {
             visible: anchor.has2DBounds || anchor.has3DBounds
         }
     }
+
 }

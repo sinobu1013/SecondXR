@@ -6,6 +6,8 @@
     <uses-permission android:name="com.oculus.permission.USE_SCENE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="horizonos.permission.HEADSET_CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.vr.headtracking" android:required="true" android:version="1"/>
     <uses-feature android:name="com.oculus.feature.PASSTHROUGH" android:required="false"/>
     <!-- %%INSERT_PERMISSIONS -->
