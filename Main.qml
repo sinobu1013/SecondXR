@@ -14,9 +14,20 @@ XrView {
         backgroundMode: xrView.passthroughEnabled ? SceneEnvironment.Transparent : SceneEnvironment.Color
     }
 
+
     xrOrigin: theOrigin
     XrOrigin {
         id: theOrigin
+
+
+
+        XrCamera {
+            id: xrCamera
+
+            onPositionChanged: {
+                VisionCamera.hello()
+            }
+        }
 
         XrController {
             controller: XrController.ControllerLeft

@@ -37,6 +37,7 @@ qt_add_qml_module(SecondXR
     RESOURCES
         meshes/teapot.mesh
     NO_RESOURCE_TARGET_PATH
+    SOURCES visioncamera.h visioncamera.cpp
 )
 
 if(ANDROID)
@@ -45,7 +46,7 @@ endif()
 
 if (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "visionOS")
     set_target_properties(SecondXR PROPERTIES
-        MACOSX_BUNDLE_GUI_IDENTIFIER io.qt.xr_input
+        MACOSX_BUNDLE_GUI_IDENTIFIER io.qt.SecondXR
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/visionos/MacOSXBundleInfo.plist.in
     )
 endif()
