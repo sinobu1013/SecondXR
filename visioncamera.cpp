@@ -41,8 +41,9 @@ void VisionCamera::hello(int id, const QImage &preview) {
 
 void VisionCamera::yorosiku(void) {
 
-    cImage->captureToFile("try.jpg");
+    if(cImage->isReadyForCapture())
+        cImage->captureToFile("try.jpg");
 
-    qDebug("Image OK");
+    qDebug() << "Image OK : " << cImage->isReadyForCapture();
 
 }
