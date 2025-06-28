@@ -39,6 +39,7 @@ qt_add_qml_module(SecondXR
         meshes/teapot.mesh
     NO_RESOURCE_TARGET_PATH
     SOURCES visioncamera.h visioncamera.cpp
+    QML_FILES Point.qml
 )
 
 if(ANDROID)

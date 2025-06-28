@@ -103,4 +103,9 @@ XrView {
         }
     }
 
+    Point {
+        id: tryPoint
+        position: Qt.vector3d(0, 200, -50)
+    }
+
 }
