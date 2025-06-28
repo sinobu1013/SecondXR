@@ -25,7 +25,8 @@ XrView {
             id: xrCamera
 
             onPositionChanged: {
-                VisionCamera.hello()
+                // VisionCamera.hello()
+                VisionCamera.yorosiku()
             }
         }
 

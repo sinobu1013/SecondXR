@@ -6,7 +6,7 @@ project(SecondXR LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 COMPONENTS Core Gui Quick Quick3D Quick3DXr)
+find_package(Qt6 COMPONENTS Core Gui Quick Quick3D Quick3DXr Multimedia)
 
 qt6_policy(SET QTP0002 NEW)
 
@@ -27,6 +27,7 @@ target_link_libraries(SecondXR PUBLIC
     Qt::Quick
     Qt::Quick3D
     Qt::Quick3DXr
+    Qt6::Multimedia
 )
 
 qt_add_qml_module(SecondXR
