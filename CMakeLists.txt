@@ -5,8 +5,10 @@ cmake_minimum_required(VERSION 3.16)
 project(SecondXR LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
+set(OpenCV_DIR "C:/OpenCV-android-sdk/sdk/native/jni")
 
 find_package(Qt6 COMPONENTS Core Gui Quick Quick3D Quick3DXr Multimedia)
+find_package(OpenCV REQUIRED)
 
 qt6_policy(SET QTP0002 NEW)
 
@@ -28,6 +30,7 @@ target_link_libraries(SecondXR PUBLIC
     Qt::Quick3D
     Qt::Quick3DXr
     Qt6::Multimedia
+    ${OpenCV_LIBRARIES}
 )
 
 qt_add_qml_module(SecondXR

@@ -4,6 +4,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <opencv2/opencv.hpp>
 #include "visioncamera.h"
 
 int main(int argc, char *argv[])
