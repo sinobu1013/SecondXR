@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <opencv2/opencv.hpp>
+#include <onnxruntime_cxx_api.h>
 #include "visioncamera.h"
 
 int main(int argc, char *argv[])

@@ -24,6 +24,10 @@ set_target_properties(SecondXR PROPERTIES
 )
 
 target_link_libraries(SecondXR PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/3Party/lib/libonnxruntime.so"
+)
+
+target_link_libraries(SecondXR PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Quick
@@ -47,7 +51,14 @@ SOURCES 3Party/include/onnxruntime/core/common/logging/capture.h 3Party/include/
 RESOURCES 3Party/include/onnxruntime/core/platform/windows/readme.txt 3Party/include/onnxruntime/core/session/snippets.dox
 )
 
+target_include_directories(SecondXR PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/3Party/include/onnxruntime/core/session"
+)
+
 if(ANDROID)
+    set_property(TARGET SecondXR APPEND PROPERTY QT_ANDROID_EXTRA_LIBS
+            "${CMAKE_CURRENT_SOURCE_DIR}/3Party/lib/libonnxruntime.so"
+        )
     set_property(TARGET SecondXR APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android)
 endif()
 
